@@ -1,0 +1,321 @@
+.navbar {
+    /*position: absolute;*/
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.navbar-default.transparent {
+    background-color: transparent;
+}
+
+.slide1, .slide2, .slide3 {
+    min-height: 700px; /* Must have a height or min-height set due to use of background images */
+    background-size: cover;
+    background-position: center center;
+}
+
+.slide1 {
+    background-image: url("../img/title/title01.jpg");
+}
+
+.slide2 {
+    background-image: url("../img/title/title02.jpg");
+}
+
+.slide3 {
+    background-image: url("../img/title/title03.jpg");
+}
+
+/* Carousel Fade Effect */
+.carousel.carousel-fade .item {
+    -webkit-transition: opacity 1s linear;
+    -moz-transition: opacity 1s linear;
+    -ms-transition: opacity 1s linear;
+    -o-transition: opacity 1s linear;
+    transition: opacity 1s linear;
+    opacity: .5;
+}
+
+.carousel.carousel-fade .active.item {
+    opacity: 1;
+}
+
+.carousel.carousel-fade .active.left,
+.carousel.carousel-fade .active.right {
+    left: 0;
+    z-index: 2;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+/* Carousel Overlay */
+.carousel-overlay {
+    position: absolute;
+    bottom: 100px;
+    right: 0;
+    left: 0;
+}
+
+/****************************/
+/*                          */
+/*Styles below just for Demo*/
+/*                          */
+/****************************/
+
+/* 네비 브랜드 */
+.navbar-default .navbar-brand {
+    color: rgb(0, 133, 0);
+}
+
+.navbar-default .navbar-brand:hover {
+    color: rgba(0, 180, 0, 1);
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    color: #fff;
+    background-color: rgba(0, 180, 0, .5);
+
+}
+
+/* 네비게이션 안쪽 */
+.navbar-default .navbar-nav > li > a {
+    color: rgba(0, 180, 0, 1);
+    text-transform: uppercase;
+    /*text-shadow: 1px 1px 1px rgba(0, 0, 0, .75);*/
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin: 5px 0px;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #fff;
+    background-color: rgba(0, 180, 0, .25);
+}
+
+.navbar-collapse.in {
+    background-color: rgba(255, 255, 255, .5);
+}
+
+.navbar-default .navbar-toggle {
+    border-color: transparent;
+}
+
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+    background-color: rgba(0, 180, 0, .5);
+}
+
+.navbar-toggle {
+    padding: 9px 10px;
+    margin-top: 8px;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    color: rgba(0, 180, 0, 1);
+}
+
+
+
+.carousel-overlay {
+    color: white;
+    /*text-shadow: 1px 1px 1px rgba(0, 0, 0, .75);*/
+}
+
+.carousel-overlay h1 {
+    font-size: 3.5em;
+}
+
+.carousel-overlay .btn {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 4px solid #398439;
+    border-radius: 6px;
+}
+
+.carousel-overlay .btn-lg {
+    font-size: 1.75em;
+    padding: 10px 30px;
+}
+
+.circles {
+    margin-top: 20px;
+    background-color: #398439;
+    color: #fff;
+    border-radius: 50%;
+    line-height: 3em;
+    width: 3em;
+    height: 3em;
+}
+
+.featurette-image {
+    display: block;
+    margin: auto;
+}
+
+.widget-title {
+    color: black;
+}
+
+.widget-divider {
+    width: 50%;
+}
+
+hr {
+    border-top: 1px solid #9C9C9C;
+    border-bottom: 1px solid #F6F6F6;
+}
+
+.divTop {
+    padding-top: 60px;
+}
+.divBottom {
+    padding-bottom: 60px;
+}
+
+/* owl-carousel */
+#owl-demo .item{
+    margin: 3px;
+}
+#owl-demo .item img{
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* 컨텐츠들 마무리 칸 */
+.callout {
+    background-color: #F5F5F5;
+    display: block;
+    padding: 24px  24px 24px 24px;
+}
+
+.callout-text {
+    color: #a8a8a7;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    margin: 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* 카운트다운 */
+.cntdwn {
+    background-color:transparent;
+    color: inherit;
+}
+
+#countdown {
+    display: inline;
+    color: green;
+    font-weight: bold;
+
+}
+
+/* 오시는길 상세내역 */
+.div_info_detail {
+    text-align: left;
+    padding: 0 2% 10px 2% ;
+}
+
+
+/*Spinner*/
+.loadingBar {
+    width: 100%;
+    height: 100%;
+    position: fixed;;
+    background-color: rgba(0, 0, 10, 0.8);
+    z-index: 10000;
+    display: none;
+    text-align: center;
+}
+
+.loadingText {
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: normal;
+    font-size: 13pt;
+    margin-top: -280px;
+}
+
+.loading {
+    width: 100px;
+    height: 100px;
+    margin: 300px auto;
+    position: relative;
+}
+
+.loading.bar div {
+    width: 10px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.4);
+    position: absolute;
+    top: 35px;
+    left: 45px;
+    opacity: 0.95;
+
+    -webkit-animation: fadeit 1.1s linear infinite;
+    animation: fadeit 1.1s linear infinite;
+}
+
+.loading.bar div:nth-child(1) {
+    -webkit-transform: rotate(0deg) translate(0, -30px);
+    transform: rotate(0deg) translate(0, -30px);
+
+    -webkit-animation-delay: 0.39s;
+    animation-delay: 0.39s;
+}
+
+.loading.bar div:nth-child(2) {
+    -webkit-transform: rotate(45deg) translate(0, -30px);
+    transform: rotate(45deg) translate(0, -30px);
+
+    -webkit-animation-delay: 0.52s;
+    animation-delay: 0.52s;
+}
+
+.loading.bar div:nth-child(3) {
+    -webkit-transform: rotate(90deg) translate(0, -30px);
+    transform: rotate(90deg) translate(0, -30px);
+
+    -webkit-animation-delay: 0.65s;
+    animation-delay: 0.65s;
+}
+
+.loading.bar div:nth-child(4) {
+    -webkit-transform: rotate(135deg) translate(0, -30px);
+    transform: rotate(135deg) translate(0, -30px);
+
+    -webkit-animation-delay: 0.78s;
+    animation-delay: 0.78s;
+}
+
+.loading.bar div:nth-child(5) {
+    -webkit-transform: rotate(180deg) translate(0, -30px);
+    transform: rotate(180deg) translate(0, -30px);
+
+    -webkit-animation-delay: 0.91s;
+    animation-delay: 0.91s;
+}
+
+.loading.bar div:nth-child(6) {
+    -webkit-transform: rotate(225deg) translate(0, -30px);
+    transform: rotate(225deg) translate(0, -30px);
+
+    -webkit-animation-delay: 1.04s;
+    animation-delay: 1.04s;
+}
+
+.loading.bar div:nth-child(7) {
+    -webkit-transform: rotate(270deg) translate(0, -30px);
+    transform: rotate(270deg) translate(0, -30px);
+
+    -webkit-animation-delay: 1.17s;
+    animation-delay: 1.17s;
+}
+
+.loading.bar div:nth-child(8) {
+    -webkit-transform: rotate(315deg) translate(0, -30px);
+    transform: rotate(315deg) translate(0, -30px);
+
+    -webkit-animation-delay: 1.3s;
+    animation-delay: 1.3s;
+}

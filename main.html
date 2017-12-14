@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Wedding Convention</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- SNS(카카오톡, 페이스북) 관련 -->
+    <meta property="og:url" content="http://ssongu.cafe24.com/wedding_convention/main.html">      <!-- 사이트주소 -->
+    <meta property="og:title" content="청첩장">        <!-- 사이트제목 -->
+    <meta property="og:description" content="탁곤이랑 유림이랑 결혼합니다^^">         <!-- 제목아래쪽에 한줄 나오는 짧은 소개글 -->
+    <meta property="og:type" content="website">             <!-- website -->
+    <meta property="og:image" content="http://ssongu.cafe24.com/wedding_convention/img/kakao.jpg">      <!-- 이미지 url -->
+
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+
+    <!-- owl-carousel -->
+    <!-- Important Owl stylesheet -->
+    <link rel="stylesheet" href="./owl-carousel/owl.carousel.css">
+    <!-- Default Theme -->
+    <link rel="stylesheet" href="./owl-carousel/owl.theme.css">
+    <!-- Include js plugin -->
+    <script src="./owl-carousel/owl.carousel.js"></script>
+
+    <!-- custom -->
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/main.js"></script>
+
+    <!-- daum지도 API -->
+    <script type="text/javascript" src="//apis.daum.net/maps/maps3.js?apikey=0393fd59fd4ec653c3b57d9686622a7c"></script>
+
+    <!-- jQuery Plugin For Auto Hiding Bootstrap Fixed Navbar -->
+    <script src="./jQuery-Plugin-For-Auto-Hiding-Bootstrap-Navbar/src/jquery.bootstrap-autohidingnavbar.js"></script>
+
+    <!-- icon -->
+    <link rel="icon" href="./img/favicon/favicon-32x32.png" sizes="32x32"/>
+    <link rel="icon" href="./img/favicon/favicon-192x192.png" sizes="192x192"/>
+    <link rel="apple-touch-icon-precomposed" href="./img/favicon/favicon-180x180.png"/>
+    <meta name="msapplication-TileImage" content="./img/favicon/favicon-270x270.png"/>
+
+    <script>
+        // 축하글 가져오기
+        commentList = function () {
+            $('#div-commentList').append(
+            '<thead>'+
+                '<tr>'+
+                    '<th class = "col-xs-3 text-center">이름</th>' +
+                    '<th class = "col-xs-9 text-center" >내용</th>' +
+                '</tr>'+
+            '</thead>' +
+            '<tbody>'
+            );
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                url: './php/getlist.php',
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                success: function (data) {
+                    if (data.length > 0) {
+                        $.each(data, function (key, val) {
+                            $('#div-commentList').append(
+                                '<tr>' +
+                                    '<td class = "text-center">' + val.name_register + '</td>' +
+                                    '<td class = "text-center">' + val.content + '</td>' +
+                                '</tr>'
+                            );
+                        });
+                    }
+                    else {
+                        $('#div-commentList').append(
+                            '<tr>' +
+                            '<td>' + '</td>' +
+                            '<td>' + '<p class="col-sm-12 text-left" style="font-size: 20px">' + '뎃글이 없습니다.' + '</p>' + '</td>' +
+                            '</tr>' +
+                            '<div style="clear:both;"></div>'
+                        );
+                    }
+                    console.log(data);
+                },
+                error: function (request, status, error) {
+                    console.log('code: ' + request.status + "\n" + 'message: ' + request.responseText + "\n" + 'error: ' + error);
+                }
+            });
+            $('#div-commentList').append(
+                '</tbody>'
+            );
+        };
+
+        // 축하글 쓰기
+        function regCommentClick() {
+            var isValid = true;
+            if ($("#name").val() == "" && $("#content").val() != "" ) {
+                alert('이름을 입력하세요.');
+                $("#name").focus();
+                isValid = false;
+            } else if ($("#content").val() == "" && $("#name").val() != "") {
+                alert('내용을 입력하세요.');
+                $("#content").focus();
+                isValid = false;
+            } else if ($("#content").val() == "" && $("#name").val() == "") {
+                alert('이름, 내용을 입력하세요.');
+                $("#content").focus();
+                isValid = false;
+            }
+
+            // json으로 만들기
+            var json_comment = new Object();
+            json_comment.name_register = $('#name').val();
+            json_comment.content = $('#content').val();
+            var send_json_comment = JSON.stringify(json_comment);
+
+            if ( isValid ) { // || inputPwd.trim() != ""
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    url: './php/write_comment.php',
+                    contentType: "application/json; charset=UTF-8",
+                    data: send_json_comment,
+                    success: function (data) {
+                        if (data == 200) {
+                            alert("축하글이 등록 되었습니다.");
+                            // 등록 후 테이블 갱신
+                            init_line();
+                            // 입력창 클리어
+                            inputClear();
+                        }
+                        console.log(data);
+                    },
+                    error: function (request, status, error) {
+                        console.log('code: ' + request.status + "\n" + 'message: ' + request.responseText + "\n" + 'error: ' + error);
+                    }
+                });
+
+            }
+        }
+
+        // 축하글 리스트 초기화
+        function init_line() {
+            $('#div-commentList').empty();
+            commentList();
+        }
+
+        // 축하글 작성 후 클리어 기능
+        function inputClear() {
+            $('#name').val("");
+            $('#content').val("");
+        }
+
+    </script>
+</head>
+
+<!-- 전송 중 로딩화면 -->
+<div class="loadingBar" id="divLoadingSpnning">
+    <div class="loading bar">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+
+
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+<!--navigation bar-->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <script>
+        $("nav.navbar-fixed-top").autoHidingNavbar();   // 네비게이션 auto hiding
+    </script>
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+            </button>
+            <a class="navbar-brand" href="#"><span class="fa fa-paw"></span><strong>탁곤 + 유림</strong>
+                <span class="fa fa-paw"
+                      style="font-size:15px; color: rgba(0, 180, 0, 1)">&nbsp;&nbsp;2017년 4월 22일(토)</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navCollapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Home</a></li>
+                <li><a href="#div_ourStory">Our Story</a></li>
+                <li><a href="#div_loveStory">Love Story</a></li>
+                <li><a href="#div_location">Location</a></li>
+                <li><a href="#div_comment">Comment</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--end nav bar-->
+
+<!--begin bg-carousel-->
+<div id="bg-fade-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        <div class="item active">
+            <div class="slide1"></div>
+        </div>
+        <div class="item">
+            <div class="slide2"></div>
+        </div>
+        <div class="item">
+            <div class="slide3"></div>
+        </div>
+    </div><!-- .carousel-inner -->
+    <div class="container carousel-overlay text-center">
+        <p class="lead">
+            이제서야 결실을 맺습니다.
+        </p>
+        <h1>
+            <strong>
+                MARRIED!!
+            </strong>
+        </h1>
+        <p class="lead">2017년 4월 22일(토)
+            <br>
+            서울시 구로구 개봉동 개봉동성당
+        </p>
+    </div>
+</div><!-- .carousel -->
+<!--end bg-carousel-->
+
+
+<!-- 본문 시작 -->
+<div class="container divTop">
+    <!-- Our Story 시작 -->
+    <div class="row text-center divBottom" id="div_ourStory">
+        <h1 class="widget-title"><strong>Our Story</strong></h1>
+        <hr class="widget-divider"/>
+        <p>
+            우리는 성당에서 만났습니다.<br>
+            그리고, 사랑을 했고, 결혼하게 되었습니다.
+        </p>
+        <img src="http://dummyimage.com/800x184" class="img-thumbnail" alt="our_sign" width="60%" height="60%"> <!-- 우리 싸인 넣을 곳 -->
+    </div>
+    <!-- Our Story 끝 -->
+    <!-- 겔러리 캐러셀 시작 -->
+    <div id="owl-demo">
+        <div class="item"><img src="http://dummyimage.com/835x556" alt="Owl Image"></div>
+        <div class="item"><img src="./img/gallary/w02.JPG" alt="Owl Image"></div>
+        <div class="item"><img src="./img/gallary/w03.JPG" alt="Owl Image"></div>       <div class="item"><img src="http://dummyimage.com/835x556" alt="Owl Image"></div>
+        <div class="item"><img src="http://dummyimage.com/835x556" alt="Owl Image"></div>
+        <div class="item"><img src="http://dummyimage.com/835x556" alt="Owl Image"></div>
+        <div class="item"><img src="./img/gallary/w07.JPG" alt="Owl Image"></div>
+    </div>
+    <!-- 겔러리 케러셀 끝 -->
+    <div class="divBottom"></div>
+    <!-- 카운트다운 시작 -->
+    <div class="callout">
+        <p class="callout-text">
+            <span class="cntdwn">
+                결혼식날짜가 잡혔습니다.<br>
+                결혼식까지는</span>
+            <span id="countdown"></span>
+            <span class="cntdwn">
+                가 남았습니다.
+            </span>
+        </p>
+    </div>
+    <!-- 카운트다운 끝 -->
+    <div class="divBottom"></div>
+    <!-- Love Story 시작 -->
+    <div class="row text-center" id="div_loveStory">
+        <h1 class="widget-title">
+            <strong>
+                Love Story
+            </strong>
+        </h1>
+        <hr class="widget-divider"/>
+        <p>
+            우리는 이렇게 사랑 했습니다.<br>
+            그 이야기를 시작합니다.
+        </p>
+    </div>
+    <!-- 타임라인 시작 -->
+    <div class="media" style="padding-top: 10px; padding-bottom: 10px">
+        <div class="pull-left">
+            <a href="#">
+                <img class="media-object" src="./img/media/media1.jpg" alt="웨딩사진">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading">웨딩사진촬영
+                <small><i>2016.12.08</i></small>
+            </h4>
+            <p>웨딩사진을 찍었습니다. 지인들이 도와주셔서 정말 감사힙니다. 힘들었지만 재미있었습니다.</p>
+        </div>
+    </div>
+    <div class="media" style="padding-top: 10px; padding-bottom: 10px">
+        <div class="pull-left">
+            <a href="#">
+                <img class="media-object" src="./img/media/media2.jpg" alt="광화문촛불">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading">광화문촛불집회
+                <small><i>2016.11.26</i></small>
+            </h4>
+            <p>광화문 집회 다녀왔습니다. 박근혜 탄핵!!! 보람되고 재미있었습니다.</p>
+        </div>
+    </div>
+
+    <!-- 타임라인 끝 -->
+
+    <div class="callout" style="margin-top: 30px">
+        <p class="callout-text">
+            그렇게 저흰 지내왔습니다.
+        </p>
+    </div>
+    <!-- Love Story 끝 -->
+    <div class="divBottom"></div>
+
+    <!-- Location 시작 -->
+    <div class="row text-center" id="div_location">
+        <h1 class="widget-title"><strong>Location</strong></h1>
+        <hr class="widget-divider"/>
+        <p>
+            결혼식은 성당에서 합니다.<br>
+            성당위치와 주차장 안내입니다.<br>
+            주차공간이 협소하니 대중교통이용을 부탁드립니다.
+        </p>
+        <div class="div_info_detail">
+            <h5>
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>개봉동성당<br>
+                1호선 개봉역 1번출구 하차 후 도보로 750m<br>
+                (10분거리)<br><br>
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>구로2동유료주차장<br>
+                개봉동성당 앞<br>
+            </h5>
+        </div>
+    </div>
+    <!-- 지도링크 시작 -->
+    <div id="map" style="width:100%;height:350px;margin-bottom: 20px"></div>
+
+    <script>
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new daum.maps.LatLng(37.4916697284, 126.8568309108), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+        var map = new daum.maps.Map(mapContainer, mapOption);    // 지도를 생성합니다
+
+        // 마커를 표시할 위치와 내용을 가지고 있는 객체 배열입니다
+        var positions = [
+            {
+                content: '<div style="padding:5px;">개봉동성당 <br><a href="http://map.daum.net/?urlX=468322&urlY=1109007&itemId=8172073" style="color:blue" target="_blank">큰지도보기</a>',
+                latlng: new daum.maps.LatLng(37.4916697284, 126.8568309108)
+            },
+            {
+                content: '<div style="padding:5px;">개봉2동유료주차장 <br><a href="http://map.daum.net/?urlX=468246&urlY=1108889&itemId=20688311" style="color:blue" target="_blank">큰지도보기</a>',
+                latlng: new daum.maps.LatLng(37.4913630193, 126.8565284512)
+            }
+        ];
+
+        for (var i = 0; i < positions.length; i++) {
+            // 마커를 생성합니다
+            var marker = new daum.maps.Marker({
+                map: map, // 마커를 표시할 지도
+                position: positions[i].latlng // 마커의 위치
+            });
+
+            // 마커에 표시할 인포윈도우를 생성합니다
+            iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+            var infowindow = new daum.maps.InfoWindow({
+                content: positions[i].content, // 인포윈도우에 표시할 내용
+                removable: iwRemoveable
+            });
+
+            // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+            // 이벤트 리스너로는 클로저를 만들어 등록합니다
+            // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+            daum.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
+//            daum.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+        }
+
+        // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
+        function makeOverListener(map, marker, infowindow) {
+            return function () {
+                infowindow.open(map, marker);
+            };
+        }
+
+        // 인포윈도우를 닫는 클로저를 만드는 함수입니다
+        function makeOutListener(infowindow) {
+            return function () {
+                infowindow.close();
+            };
+
+            // 마커에 클릭이벤트를 등록합니다
+//        daum.maps.event.addListener(marker, 'click', function() {
+//            // 마커 위에 인포윈도우를 표시합니다
+//            infowindow.open(map, marker);
+//        });
+
+        }
+    </script>
+    <!-- 지도링크 끝-->
+    <div class="callout">
+        <p class="callout-text">
+            정확한 위치는 지도를 참조하여 주시기 바랍니다.
+        </p>
+    </div>
+    <!-- Location 끝 -->
+    <div class="divBottom"></div>
+
+    <!-- Congratulations Comment 시작 -->
+    <div class="row text-center" id="div_comment">
+        <h1 class="widget-title"><strong>Comment</strong></h1>
+        <hr class="widget-divider"/>
+        <p>축하글을 남겨주세요.<br>당신의 축하글에 저희는 힘이 납니다.</p>
+    </div>
+    <!-- 축하글 시작-->
+    <div class="row" style="padding: 16px 16px 16px 16px;">
+        <div class="col-md-12" id="div-comment"
+             style="background-color: rgba(56, 56, 56, 0.3); padding: 10px 10px 10px 10px">
+            <!-- 축하글 리스트 시작 -->
+            <div class="panel panel-default">
+                <div class="panel-heading" style=""><b>축하글 리스트</b></div>
+                <div class="panel-body">
+                    <table class="table" style="table-layout:fixed; word-break:break-all;" id="div-commentList">
+                        <script>
+                            commentList();      // 축하글 가져오기
+                        </script>
+                    </table>
+                </div>
+            </div>
+            <!-- 축하글 리스트 끝 -->
+            <!-- 뎃글 쓰기 시작 -->
+            <form>
+                <div class="form-group col-md-12">
+                    <label class="sr-only" for="content">내용</label>
+                    <textarea class="form-control" name="content" id="content" placeholder="축하글을 작성해주세요" rows="3"
+                              style="width: 100%"></textarea>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label class="sr-only" for="name">이름</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="이름"
+                               style="width: 100%;height: 40px">
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="sr-only" for="btnRegCommend">등록버튼</label>
+                    <button type="button" name="btnRegCommend" id="btnRegCommend" class="btn btn-success btn-lg"
+                            onclick="regCommentClick()" style="width: 100%; height: 40px">등록
+                    </button>
+                </div>
+                <script>
+                    <!-- 축하글 쓰기 스크립트 -->
+                </script>
+            </form>
+            <!-- 뎃글 쓰기 끝 -->
+        </div>
+    </div>
+    <!-- 축하글 끝-->
+    <div class="callout">
+        <p class="callout-text">
+            축하글 감사합니다.
+        </p>
+    </div>
+    <!-- Congratulations Comment 끝 -->
+
+</div>
+<!-- 본문 끝 -->
+<hr>
+<!-- FOOTER -->
+<footer class="container-fluid">
+    <p class="pull-right"><a href="#">Back to top</a></p>
+    <p>Copyright@2016 Tak-Gon, Yu-Rim</p>
+</footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="localhost:3306/">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.0">
+    <root id="1"/>
+    <schema id="2" parent="1" name="ssongu">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="information_schema"/>
+    <schema id="4" parent="1" name="mb"/>
+    <schema id="5" parent="1" name="mysql"/>
+    <schema id="6" parent="1" name="performance_schema"/>
+    <schema id="7" parent="1" name="phpmyadmin"/>
+    <schema id="8" parent="1" name="test"/>
+    <table id="9" parent="2" name="tbl_comment_history">
+      <Comment>청첩장 축하글 히스토리 테이블</Comment>
+    </table>
+    <column id="10" parent="9" name="seqNo">
+      <Position>1</Position>
+      <Comment>축하글seqNo</Comment>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="11" parent="9" name="datetime_regist">
+      <Position>2</Position>
+      <Comment>댓글등록일시</Comment>
+      <DataType>char(14)|0</DataType>
+      <DefaultExpression>&apos;19000101000000&apos;</DefaultExpression>
+    </column>
+    <column id="12" parent="9" name="name_register">
+      <Position>3</Position>
+      <Comment>등록한 사람 이름</Comment>
+      <DataType>varchar(50)|0</DataType>
+      <DefaultExpression>&apos;No name&apos;</DefaultExpression>
+    </column>
+    <column id="13" parent="9" name="content">
+      <Position>4</Position>
+      <Comment>등록한 축하글 내용</Comment>
+      <DataType>text|0</DataType>
+    </column>
+    <key id="14" parent="9" name="PRIMARY">
+      <ColNames>seqNo</ColNames>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>
